@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title>
+	<script type="text/javascript" src="oz.js"></script>
+	<script type="text/javascript" src="fireworks.js"></script>
+	<style>
+		body { 
+			background-color: black;
+			color: white;
+			padding: 0px;
+			margin: 0px;
+		}
+		canvas { 
+			cursor: pointer; 
+		}
+		#status {
+			font-family: sans-serif;
+			font-size: 70%;
+			position: absolute;
+			right: 0px;
+			bottom: 0px;
+			text-align: right;
+		}
+		
+	</style>
+</head>
+
+<body>
+	<div id="status"></div>
+	<canvas id="canvas" width="800" height="600">No canvas support -> eat dirt</canvas>
+	<script type="text/javascript">
+		var c = OZ.$("canvas");
+		var f = new Fireworks(c);
+		var downTime = 0;
+
+		OZ.Event.add(c, "mousedown", down);
+		OZ.Event.add(c, "mouseup", up);
+		
+		function down(e) {
+			downTime = new Date().getTime();
+		}
+		
+		function up(e) {
+			var time = new Date().getTime();
+			var diff = time-downTime;
+			var c = OZ.Event.target(e);
+			var pos = OZ.DOM.pos(c);
+			var x = e.clientX - pos[0];
+			var y = e.clientY - pos[1];
+			
+			var options = {
+				shape: -1, /* 0 sphere, 1 circle, 2 spiral, -1 random */
+				color: -1, /* number, -1 random color */
+				speed: Math.max(0.3, Math.min(diff/100, 8)), /* number, -1 random */
+				particles: -1, /* number, -1 random */
+				secondary: -1, /* 1 yes, 0 no, -1 random */
+				secondaryColor: -1, /* number, -1 random color */
+			}
+			
+			f.createRandom(x, y, options);
+		}
+	</script>
+</body>
+</html>
